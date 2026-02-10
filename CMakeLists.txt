@@ -20,6 +20,10 @@ add_executable(pico-mcp2515
 
     # Main executalbes
     src/pico-mcp2515.cpp
+    # examples/Send.cpp
+    # examples/Receive.cpp
+    # examples SendTelemetry.cpp
+
 )
 
 # Add MCP2515 Lib
