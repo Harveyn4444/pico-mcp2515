@@ -5,7 +5,7 @@ This Raspberry Pi Pico library is a ported & optimized version of the magnificen
 This repo builds upon the work by [Piotr Adamczyk](https://github.com/adamczykpiotr) to include example code for the [Waveshare CAN bus Module (B)](https://www.waveshare.com/pico-can-b.htm). 
 
 <p align="center">
-<img src="https://github.com/Harveyn4444/pico-mcp2515/blob/main/assets/img/Pico-can-b_Pinout.jpg" width = 40% height = 40%>
+<img src="https://github.com/Harveyn4444/pico-mcp2515/blob/main/assets/img/Pico-can-b_Pinout.jpg" width = 100% height = 100%>
 </p>
 
 
