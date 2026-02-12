@@ -19,18 +19,18 @@ add_executable(pico-mcp2515
     include/mcp2515/mcp2515.cpp
 
     # Main executalbes
-    src/pico-mcp2515.cpp
+    #src/pico-mcp2515.cpp
     # examples/Send.cpp
     # examples/Receive.cpp
-    # examples SendTelemetry.cpp
+    examples/SendTelemetry.cpp
 
 )
 
 # Add MCP2515 Lib
 target_include_directories(pico-mcp2515 PUBLIC include/)
 
-pico_set_program_name(pico-mcp2515 "pico-mcp2515")
-pico_set_program_version(pico-mcp2515 "0.1")
+# pico_set_program_name(pico-mcp2515 "pico-mcp2515")
+# pico_set_program_version(pico-mcp2515 "0.1")
 
 pico_enable_stdio_uart(pico-mcp2515 0)
 pico_enable_stdio_usb(pico-mcp2515 1)
@@ -39,6 +39,7 @@ pico_enable_stdio_usb(pico-mcp2515 1)
 target_link_libraries(pico-mcp2515
     pico_stdlib
     hardware_spi
+    hardware_adc
 )
 
 pico_add_extra_outputs(pico-mcp2515)

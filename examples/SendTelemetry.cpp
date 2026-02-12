@@ -18,10 +18,16 @@ MCP2515 can0(SPI_PORT, PIN_CS, PIN_INT);
 struct can_frame tx;
 /*****************************************/
 
-typedef struct Telemtry{
+//Declaring Functions
+int16_t measure_pico_temperature(void);
+void Telemetry(void);
+
+struct Telemetry{
     // __uint16_t pico_temperature;
-    __uint16_t pico_temperature = 0;
-} data;
+    int16_t pico_temperature = 0;
+};
+
+struct Telemetry data;
 
 // Varibales for tracking the time
 int prevMillis = 0;
@@ -96,7 +102,8 @@ void Telemetry(void){
 }
 
 // __uint16_t measure_pico_temperature(){
-float measure_pico_temperature(){
+//float measure_pico_temperature(){
+int16_t measure_pico_temperature(void){
     adc_set_temp_sensor_enabled(true); //changes the internal circuitry to turn on the internl analogue temperature sensor and toute the adc channel
     adc_gpio_init(26);
     //Connected to ADC4
@@ -106,7 +113,8 @@ float measure_pico_temperature(){
     uint16_t raw = adc_read();
     float voltage = raw * 3.3f/(1<<12);
     // I want to make this a 16bit number - so need to cast
-    float measure_pico_temperature = 27 - (voltage - 0.706)/0.001721;
+    // float measure_pico_temperature = 27f - (voltage - 0.706f)/0.001721f;
+    int16_t measure_pico_temperature = 100.0f * (27.0f - (voltage - 0.706f)/0.001721f);
 
 
     return measure_pico_temperature;
