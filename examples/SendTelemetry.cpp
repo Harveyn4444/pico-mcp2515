@@ -25,6 +25,8 @@ void Telemetry(void);
 struct Telemetry{
     // __uint16_t pico_temperature;
     int16_t pico_temperature = 0;
+    // unsigned int msSinceBoot = 0;
+    int16_t time_since_boot = 0;
 };
 
 struct Telemetry data;
@@ -88,6 +90,7 @@ int main(){
 }
 
 void Telemetry(void){
+    data.time_since_boot = (float)msSinceBoot/1000.0f;
     //Here read Temp
     data.pico_temperature = measure_pico_temperature();
     //Here Note time since boot
@@ -95,6 +98,9 @@ void Telemetry(void){
     //so 251 is 25.1 seconds?
     // and also if this value exceeds a value then need to truncate
 
+    printf("%d", data.time_since_boot);
+    printf("%d", data.pico_temperature);
+    printf("\n");
     //Set a define for the CAN ID
     //Packet ID type too
 
