@@ -34,7 +34,7 @@ struct Telemetry data;
 // Varibales for tracking the time
 int prevMillis = 0;
 int curentMillis = 0;
-const int interval = 500; // ms to sleep
+const int interval = 1000; // ms to sleep
 unsigned int msSinceBoot = 0;
 
 
@@ -82,6 +82,13 @@ int main(){
         if(msSinceBoot - prevMillis >= interval){
             prevMillis = msSinceBoot;
             Telemetry();
+            MCP2515::ERROR err = can0.sendMessage(&tx);
+
+            if (err == MCP2515::ERROR_OK) {
+                printf("TX OK: ID=0x%03X\n", tx.can_id);
+            } else {
+                printf("TX ERROR: %d\n", err);
+            }
         }
     }
     
@@ -90,25 +97,24 @@ int main(){
 }
 
 void Telemetry(void){
-    data.time_since_boot = (float)msSinceBoot/1000.0f;
-    //Here read Temp
+    data.time_since_boot = (float)msSinceBoot/100.0f;
     data.pico_temperature = measure_pico_temperature();
-    //Here Note time since boot
-    //do unsigned int msSinceBoot = 0; vaue divided by 100 eg - have no decimals but like to the closest 10th of a second
-    //so 251 is 25.1 seconds?
-    // and also if this value exceeds a value then need to truncate
 
-    printf("%d", data.time_since_boot);
-    printf("%d", data.pico_temperature);
+    printf("%d,", data.time_since_boot);
+    printf("%d", (data.pico_temperature));
     printf("\n");
-    //Set a define for the CAN ID
-    //Packet ID type too
 
+    tx.can_id = 0x123;  // standard 11-bit ID
+    tx.can_dlc = 5;     //Sending 5 Bytes of data
+
+    tx.data[0] = 0x02;  //Packet Type ID
+    tx.data[1] = (uint8_t)((data.time_since_boot >> 8) & 0xFF);  //Time since boot
+    tx.data[2] = (uint8_t)(data.time_since_boot & 0xFF);
+    tx.data[3] = (uint8_t)((data.pico_temperature >> 8) & 0xFF);
+    tx.data[4] = (uint8_t)(data.pico_temperature & 0xFF);
 
 }
 
-// __uint16_t measure_pico_temperature(){
-//float measure_pico_temperature(){
 int16_t measure_pico_temperature(void){
     adc_set_temp_sensor_enabled(true); //changes the internal circuitry to turn on the internl analogue temperature sensor and toute the adc channel
     adc_gpio_init(26);
@@ -118,10 +124,9 @@ int16_t measure_pico_temperature(void){
     // 12-bit conversion, assume max value == ADC_VREF == 3.3 V
     uint16_t raw = adc_read();
     float voltage = raw * 3.3f/(1<<12);
-    // I want to make this a 16bit number - so need to cast
+
     // float measure_pico_temperature = 27f - (voltage - 0.706f)/0.001721f;
     int16_t measure_pico_temperature = 100.0f * (27.0f - (voltage - 0.706f)/0.001721f);
-
 
     return measure_pico_temperature;
 }
