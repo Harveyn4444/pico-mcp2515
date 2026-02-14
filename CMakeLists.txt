@@ -22,7 +22,8 @@ add_executable(pico-mcp2515
     #src/pico-mcp2515.cpp
     # examples/Send.cpp
     #examples/Receive.cpp
-    examples/SendTelemetry.cpp
+    #examples/SendTelemetry.cpp
+    examples/ReadTelemetry.cpp
 
 )
 

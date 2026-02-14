@@ -28,7 +28,6 @@ struct Telemetry{
     // unsigned int msSinceBoot = 0;
     int16_t time_since_boot = 0;
 };
-
 struct Telemetry data;
 
 // Varibales for tracking the time
@@ -97,9 +96,9 @@ int main(){
 }
 
 void Telemetry(void){
-    data.time_since_boot = (float)msSinceBoot/100.0f;
+    data.time_since_boot = (float)msSinceBoot/1000.0f;
     data.pico_temperature = measure_pico_temperature();
-
+    printf("-------------------\n");
     printf("%d,", data.time_since_boot);
     printf("%d", (data.pico_temperature));
     printf("\n");
